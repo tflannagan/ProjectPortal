@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Portal | Ty</title>
+    <link rel="icon" type="image/png" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #1a1a1a;
+            --text: #ffffff;
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+        }
+        * {
+            font-family: "Roboto Mono", monospace;
+        }
+        body {
+            font-family: "Roboto Mono", monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background);
+            color: var(--text);
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 100vh;
+        }
+        .side-panel {
+            width: 300px;
+            background-color: var(--secondary);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .main-container {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .game-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .game-list li {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: var(--secondary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .game-list li:hover, .game-list li.active {
+            background-color: var(--primary);
+        }
+        .game-preview {
+            flex-grow: 1;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        button {
+            background-color: var(--primary);
+            color: var(--text);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: var(--accent);
+        }
+        .game-info {
+            margin-bottom: 20px;
+        }
+        .game-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        .game-description {
+            font-size: 1.1em;
+            color: var(--text);
+            opacity: 0.8;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .side-panel {
+                width: 100%;
+                order: 2;
+            }
+            .main-container {
+                order: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="side-panel">
+            <h1>Project Portal</h1>
+            <ul class="game-list" id="gameList"></ul>
+            <div class="controls">
+                <button id="prevButton">◀ Previous</button>
+                <button id="nextButton">Next ▶</button>
+            </div>
+        </div>
+        <div class="main-container">
+            <div class="game-info">
+                <h2 class="game-title" id="gameTitle"></h2>
+                <p class="game-description" id="gameDescription"></p>
+            </div>
+            <iframe id="gamePreview" class="game-preview" src="" title="Game Preview"></iframe>
+            <button id="fullscreenButton" style="width: 100%; margin-top: 20px;">Play Full Screen</button>
+        </div>
+    </div>
+
+    <script>
+        const games = [
+            { title: 'RoboWars', url: 'https://tflannagan.github.io/RoboWars/', description: 'A thrilling robot battle simulation game.' },
+            { title: 'Game of Strife', url: 'https://tflannagan.github.io/GameOfStrife/', description: 'An intense strategy game of survival and conquest.' },
+            { title: 'Rune Rain', url: 'https://tflannagan.github.io/RuneRain/', description: 'A mystical arcade game with raining runes.' },
+            { title: 'Cell Life Sim', url: 'https://tflannagan.github.io/CellLifeSim/', description: 'Simulate and observe cellular life and evolution.' },
+            { title: 'Scribblurse', url: 'https://tflannagan.github.io/Scribblurse/', description: 'A creative drawing game with a twist.' },
+        ];
+
+        let currentGameIndex = 0;
+
+        const gameTitle = document.getElementById('gameTitle');
+        const gameDescription = document.getElementById('gameDescription');
+        const gamePreview = document.getElementById('gamePreview');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const fullscreenButton = document.getElementById('fullscreenButton');
+        const gameList = document.getElementById('gameList');
+
+        function updateGame() {
+            const currentGame = games[currentGameIndex];
+            gameTitle.textContent = currentGame.title;
+            gameDescription.textContent = currentGame.description;
+            gamePreview.src = currentGame.url;
+            updateActiveGameInList();
+        }
+
+        function updateActiveGameInList() {
+            const listItems = gameList.getElementsByTagName('li');
+            for (let i = 0; i < listItems.length; i++) {
+                listItems[i].classList.remove('active');
+            }
+            listItems[currentGameIndex].classList.add('active');
+        }
+
+        prevButton.addEventListener('click', () => {
+            currentGameIndex = (currentGameIndex - 1 + games.length) % games.length;
+            updateGame();
+        });
+
+        nextButton.addEventListener('click', () => {
+            currentGameIndex = (currentGameIndex + 1) % games.length;
+            updateGame();
+        });
+
+        fullscreenButton.addEventListener('click', () => {
+            window.open(games[currentGameIndex].url, '_blank');
+        });
+
+        games.forEach((game, index) => {
+            const li = document.createElement('li');
+            li.textContent = game.title;
+            li.addEventListener('click', () => {
+                currentGameIndex = index;
+                updateGame();
+            });
+            gameList.appendChild(li);
+        });
+
+        updateGame();
+    </script>
+</body>
+</html>
