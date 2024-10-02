@@ -6,21 +6,21 @@
     <title>Project Portal | Ty</title>
     <link rel="icon" type="image/png" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
     <style>
         :root {
             --background: #1a1a1a;
-            --text: #ffffff;
-            --primary: #3498db;
-            --secondary: #2c3e50;
-            --accent: #e74c3c;
+            --text: #1d1d1d;
+            --primary: #ffffff;
+            --secondary: #0062ae;
+            --accent: #9a9a9a;
         }
         * {
-            font-family: "Roboto Mono", monospace;
+            font-family: "Trade Winds", system-ui !important;
         }
         body {
-            font-family: "Roboto Mono", monospace;
+            font-family: "Trade Winds", system-ui;
             margin: 0;
             padding: 0;
             display: flex;
@@ -101,6 +101,7 @@
         .game-title {
             font-size: 2em;
             margin-bottom: 10px;
+            margin-left: 10px;
             color: var(--primary);
         }
         .game-description {
@@ -108,25 +109,56 @@
             color: var(--text);
             opacity: 0.8;
         }
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-            .side-panel {
-                width: 100%;
-                order: 2;
-            }
-            .main-container {
-                order: 1;
-            }
+
+        .folder {
+            margin-bottom: 10px;
+        }
+        .folder-title {
+            cursor: pointer;
+            padding: 10px;
+            background-color: var(--primary);
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .folder-title:hover {
+            background-color: var(--accent);
+        
+        }
+        .folder-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .folder-content.open {
+            max-height: 500px; /* Adjust this value based on your content */
+            transition: max-height 0.5s ease-in;
+        }
+        .folder-content ul {
+            list-style-type: none;
+            padding-left: 15px;
+            margin: 0;
+        }
+        .folder-content li {
+            cursor: pointer;
+            padding: 8px;
+            margin: 5px 0;
+            background-color: var(--primary);
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .folder-content li:hover {
+            background-color:var(--accent);
+        }
+        .folder-content li.active {
+            background-color: var(--accent);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="side-panel">
-            <h1>Project Portal</h1>
-            <ul class="game-list" id="gameList"></ul>
+            <h1>Project<br> Portal</h1>
+            <div id="folderList"></div>
             <div class="controls">
                 <button id="prevButton">◀ Previous</button>
                 <button id="nextButton">Next ▶</button>
@@ -143,16 +175,21 @@
     </div>
 
     <script>
-        const games = [
-            { title: 'RoboWars', url: 'https://tflannagan.github.io/RoboWars/', description: 'A thrilling robot battle simulation game.' },
-            { title: 'Game of Strife', url: 'https://tflannagan.github.io/GameOfStrife/', description: 'An intense strategy game of survival and conquest.' },
+        const projects = {
+            tools: [
             { title: 'Rune Rain', url: 'https://tflannagan.github.io/RuneRain/', description: 'A mystical background with raining runes.' },
-            { title: 'Cell Life Sim', url: 'https://tflannagan.github.io/CellLifeSim/', description: 'Simulate and observe cellular life and evolution.' },
-            { title: 'Scribblurse', url: 'https://tflannagan.github.io/Scribblurse/', description: 'A creative drawing game with a twist.' },
-            { title: 'NeuroML', url: 'https://tflannagan.github.io/NeuroML/', description: 'An interactive neural network visualization tool.' }
-        ];
+                { title: 'Scribblurse', url: 'https://tflannagan.github.io/Scribblurse/', description: 'A creative drawing game with a twist.' }
+            ],
+            simulations: [
+                { title: 'RoboWars', url: 'https://tflannagan.github.io/RoboWars/', description: 'A thrilling robot battle simulation game.' },
+                { title: 'Game of Strife', url: 'https://tflannagan.github.io/GameOfStrife/', description: 'An intense strategy game of survival and conquest.' },
+                { title: 'Cell Life Sim', url: 'https://tflannagan.github.io/CellLifeSim/', description: 'Simulate and observe cellular life and evolution.' },
+                { title: 'NeuroML', url: 'https://tflannagan.github.io/NeuroML/', description: 'An interactive neural network visualization tool.' },
+            ]
+        };
 
-        let currentGameIndex = 0;
+        let currentProjectIndex = 0;
+        let currentCategory = 'tools';
 
         const gameTitle = document.getElementById('gameTitle');
         const gameDescription = document.getElementById('gameDescription');
@@ -160,49 +197,87 @@
         const prevButton = document.getElementById('prevButton');
         const nextButton = document.getElementById('nextButton');
         const fullscreenButton = document.getElementById('fullscreenButton');
-        const gameList = document.getElementById('gameList');
+        const folderList = document.getElementById('folderList');
 
-        function updateGame() {
-            const currentGame = games[currentGameIndex];
-            gameTitle.textContent = currentGame.title;
-            gameDescription.textContent = currentGame.description;
-            gamePreview.src = currentGame.url;
-            updateActiveGameInList();
-        }
-
-        function updateActiveGameInList() {
-            const listItems = gameList.getElementsByTagName('li');
-            for (let i = 0; i < listItems.length; i++) {
-                listItems[i].classList.remove('active');
+        function createFolderSystem() {
+            for (const [category, items] of Object.entries(projects)) {
+                const folder = document.createElement('div');
+                folder.className = 'folder';
+                
+                const folderTitle = document.createElement('div');
+                folderTitle.className = 'folder-title';
+                folderTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                folderTitle.addEventListener('click', () => toggleFolder(folder));
+                
+                const folderContent = document.createElement('div');
+                folderContent.className = 'folder-content';
+                
+                const ul = document.createElement('ul');
+                
+                items.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = item.title;
+                    li.addEventListener('click', () => {
+                        currentCategory = category;
+                        currentProjectIndex = index;
+                        updateProject();
+                    });
+                    ul.appendChild(li);
+                });
+                
+                folderContent.appendChild(ul);
+                folder.appendChild(folderTitle);
+                folder.appendChild(folderContent);
+                folderList.appendChild(folder);
             }
-            listItems[currentGameIndex].classList.add('active');
+        }
+        function toggleFolder(folder) {
+            const content = folder.querySelector('.folder-content');
+            content.classList.toggle('open');
         }
 
-        prevButton.addEventListener('click', () => {
-            currentGameIndex = (currentGameIndex - 1 + games.length) % games.length;
-            updateGame();
-        });
+        function updateProject() {
+            const currentProject = projects[currentCategory][currentProjectIndex];
+            gameTitle.textContent = currentProject.title;
+            gameDescription.textContent = currentProject.description;
+            gamePreview.src = currentProject.url;
+            updateActiveProjectInList();
+        }
 
-        nextButton.addEventListener('click', () => {
-            currentGameIndex = (currentGameIndex + 1) % games.length;
-            updateGame();
-        });
+        function updateActiveProjectInList() {
+            const allListItems = folderList.getElementsByTagName('li');
+            for (let i = 0; i < allListItems.length; i++) {
+                allListItems[i].classList.remove('active');
+            }
+            const currentCategoryFolder = folderList.querySelector(`.folder:nth-child(${Object.keys(projects).indexOf(currentCategory) + 1})`);
+            const currentListItems = currentCategoryFolder.getElementsByTagName('li');
+            currentListItems[currentProjectIndex].classList.add('active');
+        }
+
+        function navigateProjects(direction) {
+            const categories = Object.keys(projects);
+            let currentCategoryIndex = categories.indexOf(currentCategory);
+            let newProjectIndex = currentProjectIndex + direction;
+
+            if (newProjectIndex < 0 || newProjectIndex >= projects[currentCategory].length) {
+                currentCategoryIndex = (currentCategoryIndex + direction + categories.length) % categories.length;
+                currentCategory = categories[currentCategoryIndex];
+                newProjectIndex = direction > 0 ? 0 : projects[currentCategory].length - 1;
+            }
+
+            currentProjectIndex = newProjectIndex;
+            updateProject();
+        }
+
+        prevButton.addEventListener('click', () => navigateProjects(-1));
+        nextButton.addEventListener('click', () => navigateProjects(1));
 
         fullscreenButton.addEventListener('click', () => {
-            window.open(games[currentGameIndex].url, '_blank');
+            window.open(projects[currentCategory][currentProjectIndex].url, '_blank');
         });
 
-        games.forEach((game, index) => {
-            const li = document.createElement('li');
-            li.textContent = game.title;
-            li.addEventListener('click', () => {
-                currentGameIndex = index;
-                updateGame();
-            });
-            gameList.appendChild(li);
-        });
-
-        updateGame();
+        createFolderSystem();
+        updateProject();
     </script>
 </body>
 </html>
