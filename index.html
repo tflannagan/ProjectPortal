@@ -7,20 +7,20 @@
     <link rel="icon" type="image/png" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
     <style>
         :root {
             --background: #1a1a1a;
             --text: #1d1d1d;
             --primary: #ffffff;
-            --secondary: #0062ae;
+            --secondary: #002847;
             --accent: #9a9a9a;
         }
         * {
-            font-family: "Trade Winds", system-ui !important;
+            font-family: "Quicksand", sans-serif !important;
         }
         body {
-            font-family: "Trade Winds", system-ui;
+            font-family: "Quicksand", sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -53,7 +53,7 @@
         h1 {
             text-align: center;
             color: var(--primary);
-            font-size: 2.5em;
+            font-size: 3.5em;
             margin-bottom: 20px;
         }
         .game-list {
@@ -80,7 +80,7 @@
         .controls {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 10px;
         }
         button {
             background-color: var(--primary);
@@ -106,7 +106,7 @@
         }
         .game-description {
             font-size: 1.1em;
-            color: var(--text);
+            color: var(--primary);
             opacity: 0.8;
         }
 
@@ -160,8 +160,8 @@
             <h1>Project<br> Portal</h1>
             <div id="folderList"></div>
             <div class="controls">
-                <button id="prevButton">◀ Previous</button>
-                <button id="nextButton">Next ▶</button>
+                <button id="prevButton">◀</button>
+                <button id="nextButton">▶</button>
             </div>
         </div>
         <div class="main-container">
@@ -176,18 +176,21 @@
 
     <script>
         const projects = {
-            tools: [ 
-            { title: 'Rune Rain', url: 'https://tflannagan.github.io/RuneRain/', description: 'A mystical background with raining runes.' },
-                { title: 'Scribblurse', url: 'https://tflannagan.github.io/Scribblurse/', description: 'A creative drawing game with a twist.' },
-                { title: 'StickiWall', url: 'https://tflannagan.github.io/StickiWall/', description: 'A digital sticky note wall for organizing thoughts and ideas.' }
-            ],
             simulations: [
             { title: 'FractalWars', url: 'https://tflannagan.github.io/FractalWars/', description: 'An immersive fractal-based simulation game.' },
+            { title: 'FractalFlower', url: 'https://tflannagan.github.io/FractalFlower/', description: 'An interesting fractal flower visualization sim.' },
                 { title: 'RoboWars', url: 'https://tflannagan.github.io/RoboWars/', description: 'A thrilling robot battle simulation game.' },
                 { title: 'Game of Strife', url: 'https://tflannagan.github.io/GameOfStrife/', description: 'An intense strategy game of survival and conquest.' },
-                { title: 'Cell Life Sim', url: 'https://tflannagan.github.io/CellLifeSim/', description: 'Simulate and observe cellular life and evolution.' },
-                { title: 'NeuroML', url: 'https://tflannagan.github.io/NeuroML/', description: 'An interactive neural network visualization tool.' },
+                { title: 'Cell Life Sim', url: 'https://tflannagan.github.io/CellLifeSim/', description: 'Simulate and observe cellular life and evolution.' }
+            ],            
+            tools: [ 
+            { title: 'Rune Rain', url: 'https://tflannagan.github.io/RuneRain/', description: 'A mystical background with raining runes.' },
+          
+           
+                { title: 'Scribblurse', url: 'https://tflannagan.github.io/Scribblurse/', description: 'A creative drawing game with a twist.' },
+                { title: 'StickiWall', url: 'https://tflannagan.github.io/StickiWall/', description: 'A digital sticky note wall for organizing thoughts and ideas.' }
             ]
+           
         };
 
         let currentProjectIndex = 0;
