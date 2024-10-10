@@ -190,8 +190,22 @@
             margin-bottom: 20px;
         }
         .portal-icon-link {
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80px;
+            height: 80px;
             text-decoration: none;
+            color: var(--primary);
+            font-weight: bold;
+            text-align: center;
+            background-color: var(--secondary);
+            border-radius: 10px;
+        }
+        
+        .portal-icon-link img {
+            max-width: 100%;
+            max-height: 100%;
         }
     </style>
 </head>
@@ -199,7 +213,7 @@
     <div class="container">
         <div class="side-panel">
             <a href="https://tyflannagan.tech/" class="portal-icon-link" target="_blank">
-                <img src="/assets/main.png" alt="Project Portal" class="portal-icon">
+                <img src="/main.png" alt="Project Portal" class="portal-icon">
             </a>
             <div id="folderList"></div>
         </div>
