@@ -14,6 +14,7 @@
             --text: #1d1d1d;
             --primary: #ffffff;
             --secondary: #002847;
+            --secondary-transparent: #00284700; 
             --accent: #9a9a9a;
         }
         * {
@@ -44,9 +45,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            gap: 20px; 
+            gap: 20px;
+            overflow-y: auto;
+            max-height: 100vh;
+            z-index: 1000; 
         }
+
         .main-container {
             flex-grow: 1;
             padding: 20px;
@@ -84,7 +88,7 @@
             background-color: var(--accent);
         }
         .game-info {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         .game-title {
             font-size: 2em;
@@ -97,37 +101,49 @@
             color: var(--primary);
             opacity: 0.8;
         }
-        .folder {
-            margin-bottom: 20px;
-            position: relative;
+        #folderList {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
         }
+
+        .folder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
         .folder-title {
-            cursor: pointer;
             width: 60px;
             height: 60px;
+            cursor: pointer;
             background-color: var(--primary);
             border-radius: 50%;
-            transition: background-color 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
+            transition: background-color 0.3s ease;
         }
         .folder-title:hover {
             background-color: var(--accent);
         }
         .folder-content {
-            position: absolute;
-            left: 100%;
-            top: 0;
-            background-color: var(--secondary);
-            border-radius: 5px;
-            padding: 10px;
-            display: none;
-            z-index: 10;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, margin 0.3s ease-out;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
         .folder-content.open {
-            display: block;
+            
+       
+            transition: max-height 0.5s ease-in, margin 0.5s ease-in;
+            
         }
         .folder-content ul {
             list-style-type: none;
@@ -171,11 +187,8 @@
             text-align: center;
             border-radius: 6px;
             padding: 5px 10px;
-            position: absolute;
-            z-index: 20;
-            left: 120%;
-            top: 50%;
-            transform: translateY(-50%);
+            position: fixed;
+            z-index: 9999;
             opacity: 0;
             transition: opacity 0.3s, visibility 0.3s;
             white-space: nowrap;
@@ -189,9 +202,10 @@
         .portal-icon {
             width: 80px; 
             height: auto;
-          
-            
+            margin-top: 10px;
         }
+       
+       
         .portal-icon-link {
             display: flex;
             justify-content: center;
@@ -278,11 +292,6 @@
                 folderTitle.className = 'folder-title';
                 folderTitle.innerHTML = `<span class="folder-icon">${icons[category]}</span>`;
                 
-                const folderTooltip = document.createElement('span');
-                folderTooltip.className = 'tooltip';
-                folderTooltip.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-                
-                
                 folderTitle.addEventListener('click', (e) => {
                     e.stopPropagation();
                     toggleFolder(folder);
@@ -300,11 +309,12 @@
                     projectTooltip.className = 'tooltip';
                     projectTooltip.textContent = item.title;
                     li.appendChild(projectTooltip);
+                    li.addEventListener('mouseover', () => showTooltip(li, projectTooltip));
+                    li.addEventListener('mouseout', () => hideTooltip(projectTooltip));
                     li.addEventListener('click', () => {
                         currentCategory = category;
                         currentProjectIndex = index;
                         updateProject();
-                        closeAllFolders();
                     });
                     ul.appendChild(li);
                 });
@@ -315,10 +325,38 @@
                 folderList.appendChild(folder);
             }
         }
+
+        function showTooltip(element, tooltip) {
+            const rect = element.getBoundingClientRect();
+            tooltip.style.left = `${rect.right + 10}px`;
+            tooltip.style.top = `${rect.top + rect.height / 2}px`;
+            tooltip.style.transform = 'translateY(-50%)';
+            tooltip.style.visibility = 'visible';
+            tooltip.style.opacity = '1';
+        }
+
+        function hideTooltip(tooltip) {
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = '0';
+        }
         function toggleFolder(folder) {
-            closeAllFolders();
             const content = folder.querySelector('.folder-content');
-            content.classList.toggle('open');
+            const isOpen = content.classList.toggle('open');
+            
+            if (isOpen) {
+                const height = content.scrollHeight;
+                content.style.maxHeight = `${height}px`;
+            } else {
+                content.style.maxHeight = '0px';
+            }
+
+            // Close other open folders
+            document.querySelectorAll('.folder-content.open').forEach(openContent => {
+                if (openContent !== content) {
+                    openContent.classList.remove('open');
+                    openContent.style.maxHeight = '0px';
+                }
+            });
         }
 
         function closeAllFolders() {
