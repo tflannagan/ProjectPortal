@@ -50,7 +50,21 @@
             overflow-y: auto;
             max-height: 100vh;
             z-index: 1000; 
-         
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) var(--secondary);
+        }
+
+        .side-panel::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .side-panel::-webkit-scrollbar-track {
+            background: var(--secondary);
+        }
+        
+        .side-panel::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
         }
 
         .side-panel-top {
@@ -143,6 +157,7 @@
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: var(--accent) var(--secondary);
+            -ms-overflow-style: none; 
             overflow: hidden;
             transition: max-height 0.3s ease-out, margin 0.3s ease-out;
             width: 100%;
@@ -177,6 +192,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            -ms-overflow-style: auto;
         }
         .folder-content li:hover {
             background-color: var(--accent);
@@ -276,6 +292,23 @@
             height: 24px;
             fill: var(--secondary);
         }
+
+        .folder-title,
+.folder-content li,
+.tooltip {
+    transition: all 0.2s ease;
+}
+
+
+
+@supports (-ms-overflow-style: none) {
+    .folder-content {
+        scrollbar-face-color: var(--accent);
+        scrollbar-track-color: var(--secondary);
+        scrollbar-arrow-color: var(--accent);
+        scrollbar-shadow-color: var(--secondary);
+    }
+}
 
         @media (max-height: 800px) {
             .side-panel {
