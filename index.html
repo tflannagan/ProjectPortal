@@ -140,6 +140,9 @@
         }
         .folder-content {
             max-height: 0;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) var(--secondary);
             overflow: hidden;
             transition: max-height 0.3s ease-out, margin 0.3s ease-out;
             width: 100%;
@@ -180,7 +183,7 @@
             background-color: var(--accent);
         }
         .folder-icon, .project-icon {
-            font-size: 18px;
+            font-size: 15px;
             color: var(--secondary);
             width: 24px;
             height: 24px;
