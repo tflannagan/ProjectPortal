@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
     <style>
+        
         :root {
             --background: #1a1a1a;
             --text: #1d1d1d;
@@ -17,10 +18,12 @@
             --secondary-transparent: #00284700; 
             --accent: #cac9c9;
         }
+
         * {
             font-family: "Quicksand", sans-serif !important;
             box-sizing: border-box;
         }
+
         body {
             font-family: "Quicksand", sans-serif;
             margin: 0;
@@ -32,12 +35,14 @@
             background-color: var(--background);
             color: var(--text);
         }
+
         .container {
             display: flex;
             width: 100%;
             max-width: 1200px;
             height: 100vh;
         }
+
         .side-panel {
             width: 120px;
             background-color: var(--secondary);
@@ -46,7 +51,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between; 
-            gap: 20px;
+            gap: 15px;
             overflow-y: auto;
             max-height: 100vh;
             z-index: 1000; 
@@ -71,7 +76,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
 
         .main-container {
@@ -80,23 +85,27 @@
             display: flex;
             flex-direction: column;
         }
+
         h1 {
             text-align: center;
             color: var(--primary);
             font-size: 1.2em;
             margin-bottom: 20px;
         }
+
         .game-preview {
             flex-grow: 1;
             border: none;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .controls {
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
         }
+
         button {
             background-color: var(--primary);
             color: var(--text);
@@ -107,27 +116,32 @@
             transition: background-color 0.3s;
             font-size: 1em;
         }
+
         button:hover {
             background-color: var(--accent);
         }
+
         .game-info {
             margin-bottom: 10px;
         }
+
         .game-title {
             font-size: 2em;
             margin-bottom: 10px;
             margin-left: 0px;
             color: var(--primary);
         }
+
         .game-description {
             font-size: 1.1em;
             color: var(--primary);
             opacity: 0.8;
         }
+
         #folderList {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             width: 100%;
         }
 
@@ -136,6 +150,7 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
+            height: auto;
         }
 
         .folder-title {
@@ -149,9 +164,11 @@
             justify-content: center;
             transition: background-color 0.3s ease;
         }
+
         .folder-title:hover {
             background-color: var(--accent);
         }
+
         .folder-content {
             max-height: 0;
             overflow-y: auto;
@@ -167,24 +184,24 @@
         }
 
         .folder-content.open {
-            max-height: 200px; /* Limit height and make scrollable */
-            margin: 10px 0;
-            padding: 5px 0;
-       
-            transition: max-height 0.5s ease-in, margin 0.5s ease-in;
-            
+            max-height: 200px;
+            margin: 5px;
+            padding: 0;
+            transition: max-height 0.5s ease-in, margin 0.5s ease-in;         
         }
+
         .folder-content ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
             border-radius: 50px;
         }
+
         .folder-content li {
             cursor: pointer;
             width: 50px;
             height: 50px;
-            margin: 5px 0;
+            margin: 10px 0px;
             background-color: var(--primary);
             border-radius: 50%;
             transition: background-color 0.3s ease;
@@ -194,17 +211,20 @@
             position: relative;
             -ms-overflow-style: auto;
         }
+
         .folder-content li:hover {
             background-color: var(--accent);
         }
+
         .folder-content li.active {
             background-color: var(--accent);
         }
+        
         .folder-icon, .project-icon {
             font-size: 15px;
             color: var(--secondary);
-            width: 24px;
-            height: 24px;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -223,6 +243,7 @@
             background: var(--accent);
             border-radius: 4px;
         }
+
         .tooltip {
             visibility: hidden;
             background-color: var(--accent);
@@ -237,18 +258,19 @@
             white-space: nowrap;
             pointer-events: none;
         }
+
         .folder-title:hover .tooltip,
         .folder-content li:hover .tooltip {
             visibility: visible;
             opacity: 1;
         }
+
         .portal-icon {
             width: 80px; 
             height: auto;
             margin-top: 10px;
         }
-       
-       
+
         .portal-icon-link {
             display: flex;
             justify-content: center;
@@ -268,8 +290,7 @@
             max-height: 100%;
         }
 
-        .github-icon {
-           
+        .github-icon {      
             width: 40px;
             height: 40px;
             min-height: 40px;
@@ -294,21 +315,19 @@
         }
 
         .folder-title,
-.folder-content li,
-.tooltip {
-    transition: all 0.2s ease;
-}
+        .folder-content li,
+        .tooltip {
+            transition: all 0.2s ease;
+        }
 
-
-
-@supports (-ms-overflow-style: none) {
-    .folder-content {
-        scrollbar-face-color: var(--accent);
-        scrollbar-track-color: var(--secondary);
-        scrollbar-arrow-color: var(--accent);
-        scrollbar-shadow-color: var(--secondary);
-    }
-}
+        @supports (-ms-overflow-style: none) {
+            .folder-content {
+                scrollbar-face-color: var(--accent);
+                scrollbar-track-color: var(--secondary);
+                scrollbar-arrow-color: var(--accent);
+                scrollbar-shadow-color: var(--secondary);
+            }
+        }
 
         @media (max-height: 800px) {
             .side-panel {
@@ -344,6 +363,7 @@
                 height: 20px;
             }
         }
+
     </style>
 </head>
 <body>
@@ -470,6 +490,7 @@
             tooltip.style.visibility = 'hidden';
             tooltip.style.opacity = '0';
         }
+        
         function toggleFolder(folder) {
             const content = folder.querySelector('.folder-content');
             const isOpen = content.classList.toggle('open');
