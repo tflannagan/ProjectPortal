@@ -4,571 +4,377 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Portal | Ty</title>
-    <link rel="icon" type="image/png" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        
         :root {
-            --background: #1a1a1a;
-            --text: #1d1d1d;
-            --primary: #ffffff;
-            --secondary: #002847;
-            --secondary-transparent: #00284700; 
-            --accent: #cac9c9;
+            --bg-primary: #0a1220;
+            --bg-secondary: rgba(15, 23, 42, 0.6);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-primary: #2563eb;
+            --accent-secondary: #1e40af;
+            --accent-gradient: linear-gradient(60deg, #3b82f6, #1d4ed8);
+            --card-bg: rgba(31, 31, 31, 0.4);
+            --transition-speed: 0.3s;
         }
 
         * {
-            font-family: "Quicksand", sans-serif !important;
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
+            font-family: 'Quicksand', sans-serif;
         }
 
         body {
-            font-family: "Quicksand", sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
-            background-color: var(--background);
-            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        .container {
-            display: flex;
-            width: 100%;
+        .header {
+            padding: 1rem;
+            background: var(--bg-secondary);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
             max-width: 1200px;
-            height: 100vh;
-        }
-
-        .side-panel {
-            width: 120px;
-            background-color: var(--secondary);
-            padding: 20px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between; 
-            gap: 15px;
-            overflow-y: auto;
-            max-height: 100vh;
-            z-index: 1000; 
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) var(--secondary);
-        }
-
-        .side-panel::-webkit-scrollbar {
-            width: 2px;
-        }
-        
-        .side-panel::-webkit-scrollbar-track {
-            background: var(--secondary);
-        }
-        
-        .side-panel::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 4px;
-        }
-
-        .side-panel-top {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .main-container {
-            flex-grow: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--primary);
-            font-size: 1.2em;
-            margin-bottom: 20px;
-        }
-
-        .game-preview {
-            flex-grow: 1;
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .controls {
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        button {
-            background-color: var(--primary);
-            color: var(--text);
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 1em;
-        }
-
-        button:hover {
-            background-color: var(--accent);
-        }
-
-        .game-info {
-            margin-bottom: 10px;
-        }
-
-        .game-title {
-            font-size: 2em;
-            margin-bottom: 10px;
-            margin-left: 0px;
-            color: var(--primary);
-        }
-
-        .game-description {
-            font-size: 1.1em;
-            color: var(--primary);
-            opacity: 0.8;
-        }
-
-        #folderList {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-        }
-
-        .folder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            height: auto;
-        }
-
-        .folder-title {
-            width: 60px;
-            height: 60px;
-            cursor: pointer;
-            background-color: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.3s ease;
-        }
-
-        .folder-title:hover {
-            background-color: var(--accent);
-        }
-
-        .folder-content {
-            max-height: 0;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) var(--secondary);
-            -ms-overflow-style: none; 
-            overflow: hidden;
-            transition: max-height 0.3s ease-out, margin 0.3s ease-out;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
             align-items: center;
         }
 
-        .folder-content.open {
-            max-height: 200px;
-            margin: 5px;
-            padding: 0;
-            transition: max-height 0.5s ease-in, margin 0.5s ease-in;         
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .folder-content ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            border-radius: 50px;
-        }
-
-        .folder-content li {
-            cursor: pointer;
-            width: 50px;
-            height: 50px;
-            margin: 10px 0px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            transition: background-color 0.3s ease;
+        .github-link {
+            color: var(--text-primary);
             display: flex;
             align-items: center;
-            justify-content: center;
-            position: relative;
-            -ms-overflow-style: auto;
-        }
-
-        .folder-content li:hover {
-            background-color: var(--accent);
-        }
-
-        .folder-content li.active {
-            background-color: var(--accent);
-        }
-        
-        .folder-icon, .project-icon {
-            font-size: 15px;
-            color: var(--secondary);
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            
-        }
-
-        .folder-content::-webkit-scrollbar {
-            width: 2px;
-        }
-        
-        .folder-content::-webkit-scrollbar-track {
-            background: var(--secondary);
-        }
-        
-        .folder-content::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 4px;
-        }
-
-        .tooltip {
-            visibility: hidden;
-            background-color: var(--accent);
-            color: var(--text);
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px 10px;
-            position: fixed;
-            z-index: 9999;
-            opacity: 0;
-            transition: opacity 0.3s, visibility 0.3s;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-
-        .folder-title:hover .tooltip,
-        .folder-content li:hover .tooltip {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .portal-icon {
-            width: 80px; 
-            height: auto;
-            margin-top: 10px;
-        }
-
-        .portal-icon-link {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 80px;
-            height: 80px;
+            gap: 0.5rem;
             text-decoration: none;
-            color: var(--primary);
-            font-weight: bold;
-            text-align: center;
-            background-color: var(--secondary);
-            border-radius: 10px;
-        }
-        
-        .portal-icon-link img {
-            max-width: 100%;
-            max-height: 100%;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            background: var(--accent-gradient);
+            font-weight: 500;
+            transition: opacity var(--transition-speed);
         }
 
-        .github-icon {      
-            width: 40px;
-            height: 40px;
-            min-height: 40px;
-            min-width: 40px;
-            background-color: var(--primary);
-            border-radius: 50%;
+        .github-link:hover {
+            opacity: 0.9;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            gap: 1rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 9999px;
+            backdrop-filter: blur(10px);
+            width: fit-content;
+            margin: 0 auto;
+            justify-content: center;
+        }
+
+        .tab {
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-weight: 500;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .tab.active {
+            background: var(--accent-gradient);
+            color: var(--text-primary);
+        }
+
+        .project-carousel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            overflow: hidden;
+            background: var(--card-bg);
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-info {
+            padding: 1rem;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .project-preview {
+            flex: 1;
+            width: 100%;
+            border: none;
+            border-radius: 0 0 1rem 1rem;
+            background: var(--bg-primary);
+        }
+
+        .carousel-controls {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-btn {
+            padding: 0.75rem;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            cursor: pointer;
+            border-radius: 9999px;
+            transition: background-color var(--transition-speed);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.3s ease;
-            margin-bottom: 20px; 
         }
 
-        .github-icon:hover {
-            background-color: var(--accent);
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        .github-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--secondary);
+        .launch-btn {
+            flex: 1;
+            padding: 0.75rem 2rem;
+            border: none;
+            background: var(--accent-gradient);
+            color: var(--text-primary);
+            border-radius: 9999px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: opacity var(--transition-speed);
         }
 
-        .folder-title,
-        .folder-content li,
-        .tooltip {
-            transition: all 0.2s ease;
+        .launch-btn:hover {
+            opacity: 0.9;
         }
 
-        @supports (-ms-overflow-style: none) {
-            .folder-content {
-                scrollbar-face-color: var(--accent);
-                scrollbar-track-color: var(--secondary);
-                scrollbar-arrow-color: var(--accent);
-                scrollbar-shadow-color: var(--secondary);
+        @media (max-width: 768px) {
+            .tabs {
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: none;
             }
-        }
 
-        @media (max-height: 800px) {
-            .side-panel {
-                width: 100px;
-                padding: 10px 5px;
+            .tabs::-webkit-scrollbar {
+                display: none;
             }
-            
-            .folder-title {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .folder-content li {
-                width: 40px;
-                height: 40px;
-                margin: 8px 0;
-            }
-            
-            .portal-icon-link {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .github-icon {
-                width: 35px;
-                height: 35px;
-                min-height: 35px;
-            min-width: 35px;
-            }
-            
-            .github-icon svg {
-                width: 20px;
-                height: 20px;
+
+            .tab {
+                scroll-snap-align: start;
+                white-space: nowrap;
             }
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn var(--transition-speed) ease-in-out;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="side-panel">
-            <div class="side-panel-top">
-                <a href="https://tyflannagan.tech/" class="portal-icon-link" target="_blank">
-                    <img src="main.png" alt="Project Portal" class="portal-icon">
-                </a>
-                <div id="folderList"></div>
-            </div>
-            <a href="https://github.com/tflannagan" class="github-icon" target="_blank" title="Visit my GitHub">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="https://tyflannagan.tech/" class="logo">TF</a>
+            <a href="https://github.com/tflannagan" target="_blank" class="github-link">
+                <svg height="24" width="24" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
                 </svg>
+                GitHub
             </a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="tabs" id="categoryTabs">
+            <button class="tab active" data-category="tools">Tools</button>
+            <button class="tab" data-category="simulations">Simulations</button>
         </div>
-        <div class="main-container">
-            <div class="game-info">
-                <h2 class="game-title" id="gameTitle"></h2>
-                <p class="game-description" id="gameDescription"></p>
+
+        <div class="project-carousel">
+            <div class="project-info">
+                <h2 class="project-title" id="projectTitle"></h2>
+                <p class="project-description" id="projectDescription"></p>
             </div>
-            <iframe id="gamePreview" class="game-preview" src="" title="Game Preview"></iframe>
-            <div class="controls">
-                <button id="prevButton">◀</button>
-                <button id="fullscreenButton" style="flex-grow: 1; margin: 0 10px;">Open Full Screen</button>
-                <button id="nextButton">▶</button>
+            <iframe id="projectPreview" class="project-preview" src="" title="Project Preview"></iframe>
+            <div class="carousel-controls">
+                <button class="control-btn" id="prevBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button class="launch-btn" id="launchBtn">Launch Project</button>
+                <button class="control-btn" id="nextBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
         const projects = {
             simulations: [
-            { title: 'Smolverse', url: 'https://tflannagan.github.io/Smolverse/', description: 'A micro universe simulation experience.', icon: 'SV' },
-            { title: 'Smolverse3D', url: 'https://tflannagan.github.io/Smolverse3D/', description: 'A (3D) micro universe simulation experience.', icon: 'S3' },
-            { title: 'BioRealm', url: 'https://tflannagan.github.io/CellLifeSim/', description: 'Simulate and observe cellular life and evolution.', icon: 'BR' },  
-                { title: 'RoboWars', url: 'https://tflannagan.github.io/RoboWars/', description: 'A thrilling robot battle simulation game.', icon: 'RW' },
-                { title: 'Fractal Flower', url: 'https://tflannagan.github.io/FractalFlower/', description: 'An interesting fractal flower visualization sim.', icon: 'FF' },
-                { title: 'Rune Rain', url: 'https://tflannagan.github.io/RuneRain/', description: 'A mystical background with raining runes.', icon: 'RR' },
-                { title: 'Game of Strife', url: 'https://tflannagan.github.io/GameOfStrife/', description: 'An intense strategy game of survival and conquest.', icon: 'GS' },
-                { title: 'TextLife', url: 'https://tflannagan.github.io/TextLife/', description: 'A text-based life simulation experience.', icon: 'TL' },
-                { title: 'Particlus', url: 'https://tflannagan.github.io/Particlus/', description: 'An interactive particle simulation system.', icon: 'PS' },
-                { title: 'Planeticlus', url: 'https://tflannagan.github.io/Planeticlus/', description: 'A celestial body orbit and gravitational simulation.', icon: 'PL' },
-            ],            
-            tools: [ 
-            { title: 'Gridbook', url: 'https://tflannagan.github.io/Gridbook/', description: 'An interactive grid-based notebook for organized note-taking.', icon: 'GB' },
-            { title: 'StickiWall', url: 'https://tflannagan.github.io/StickiWall/', description: 'A digital sticky note wall for organizing thoughts and ideas.', icon: 'SW' },
-            { title: 'StoriNotes', url: 'https://tflannagan.github.io/StoriNotes/', description: 'A note-taking application for organizing your thoughts and ideas.', icon: 'SN' },
-            { title: 'TimeBlock', url: 'https://tflannagan.github.io/TimeBlock/', description: 'A time management and scheduling tool.', icon: 'TB' },
-            { title: 'Scribblurse', url: 'https://tflannagan.github.io/Scribblurse/', description: 'A creative drawing game with a twist.', icon: 'SC' },
-            { title: 'Steggo', url: 'https://tflannagan.github.io/Steggo/', description: 'A steganography tool for hiding messages in images.', icon: 'SG' },
-            { title: 'ExcelGuide', url: 'https://tflannagan.github.io/ExcelGuide/', description: 'An interactive guide for Excel tips and tricks.', icon: 'EG' },
-            { title: 'Vttify', url: 'https://tflannagan.github.io/VttifyApp/', description: 'A VTT subtitle file converter and editor.', icon: 'VT' },
-            { title: 'MP3ify', url: 'https://tflannagan.github.io/MP3ify/', description: 'A tool for converting and managing MP3 files.', icon: 'MP' },
-        { title: 'Base64ify', url: 'https://tflannagan.github.io/Base64ify/', description: 'A Base64 encoding and decoding utility.', icon: 'B6' }
-        ]
-    };
-
-        const icons = {
-            simulations: 'SIM',
-            tools: 'TOOL'
+                { title: 'Smolverse', url: 'https://tflannagan.github.io/Smolverse/', description: 'A micro universe simulation experience.' },
+                { title: 'Smolverse3D', url: 'https://tflannagan.github.io/Smolverse3D/', description: 'A (3D) micro universe simulation experience.' },
+                { title: 'BioRealm', url: 'https://tflannagan.github.io/CellLifeSim/', description: 'Simulate and observe cellular life and evolution.' },
+                { title: 'RoboWars', url: 'https://tflannagan.github.io/RoboWars/', description: 'A thrilling robot battle simulation game.' },
+                { title: 'Fractal Flower', url: 'https://tflannagan.github.io/FractalFlower/', description: 'An interesting fractal flower visualization sim.' },
+                { title: 'Rune Rain', url: 'https://tflannagan.github.io/RuneRain/', description: 'A mystical background with raining runes.' },
+                { title: 'Game of Strife', url: 'https://tflannagan.github.io/GameOfStrife/', description: 'An intense strategy game of survival and conquest.' },
+                { title: 'TextLife', url: 'https://tflannagan.github.io/TextLife/', description: 'A text-based life simulation experience.' },
+                { title: 'Particlus', url: 'https://tflannagan.github.io/Particlus/', description: 'An interactive particle simulation system.' },
+                { title: 'Planeticlus', url: 'https://tflannagan.github.io/Planeticlus/', description: 'A celestial body orbit and gravitational simulation.' }
+            ],
+            tools: [
+                { title: 'Gridbook', url: 'https://tflannagan.github.io/Gridbook/', description: 'An interactive grid-based notebook for organized note-taking.' },
+                { title: 'StickiWall', url: 'https://tflannagan.github.io/StickiWall/', description: 'A digital sticky note wall for organizing thoughts and ideas.' },
+                { title: 'StoriNotes', url: 'https://tflannagan.github.io/StoriNotes/', description: 'A note-taking application for organizing your thoughts and ideas.' },
+                { title: 'TimeBlock', url: 'https://tflannagan.github.io/TimeBlock/', description: 'A time management and scheduling tool.' },
+                { title: 'Scribblurse', url: 'https://tflannagan.github.io/Scribblurse/', description: 'A creative drawing game with a twist.' },
+                { title: 'Steggo', url: 'https://tflannagan.github.io/Steggo/', description: 'A steganography tool for hiding messages in images.' },
+                { title: 'ExcelGuide', url: 'https://tflannagan.github.io/ExcelGuide/', description: 'An interactive guide for Excel tips and tricks.' },
+                { title: 'Vttify', url: 'https://tflannagan.github.io/VttifyApp/', description: 'A VTT subtitle file converter and editor.' },
+                { title: 'MP3ify', url: 'https://tflannagan.github.io/MP3ify/', description: 'A tool for converting and managing MP3 files.' },
+                { title: 'Base64ify', url: 'https://tflannagan.github.io/Base64ify/', description: 'A Base64 encoding and decoding utility.' }
+            ]
         };
 
-        let currentProjectIndex = 0;
         let currentCategory = 'tools';
-
-        const gameTitle = document.getElementById('gameTitle');
-        const gameDescription = document.getElementById('gameDescription');
-        const gamePreview = document.getElementById('gamePreview');
-        const prevButton = document.getElementById('prevButton');
-        const nextButton = document.getElementById('nextButton');
-        const fullscreenButton = document.getElementById('fullscreenButton');
-        const folderList = document.getElementById('folderList');
-
-
-        function createFolderSystem() {
-            for (const [category, items] of Object.entries(projects)) {
-                const folder = document.createElement('div');
-                folder.className = 'folder';
-                
-                const folderTitle = document.createElement('div');
-                folderTitle.className = 'folder-title';
-                folderTitle.innerHTML = `<span class="folder-icon">${icons[category]}</span>`;
-                
-                folderTitle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleFolder(folder);
-                });
-                
-                const folderContent = document.createElement('div');
-                folderContent.className = 'folder-content';
-                
-                const ul = document.createElement('ul');
-                
-                items.forEach((item, index) => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<span class="project-icon">${item.icon}</span>`;
-                    const projectTooltip = document.createElement('span');
-                    projectTooltip.className = 'tooltip';
-                    projectTooltip.textContent = item.title;
-                    li.appendChild(projectTooltip);
-                    li.addEventListener('mouseover', () => showTooltip(li, projectTooltip));
-                    li.addEventListener('mouseout', () => hideTooltip(projectTooltip));
-                    li.addEventListener('click', () => {
-                        currentCategory = category;
-                        currentProjectIndex = index;
-                        updateProject();
-                    });
-                    ul.appendChild(li);
-                });
-                
-                folderContent.appendChild(ul);
-                folder.appendChild(folderTitle);
-                folder.appendChild(folderContent);
-                folderList.appendChild(folder);
-            }
-        }
-
-        function showTooltip(element, tooltip) {
-            const rect = element.getBoundingClientRect();
-            tooltip.style.left = `${rect.right + 10}px`;
-            tooltip.style.top = `${rect.top + rect.height / 2}px`;
-            tooltip.style.transform = 'translateY(-50%)';
-            tooltip.style.visibility = 'visible';
-            tooltip.style.opacity = '1';
-        }
-
-        function hideTooltip(tooltip) {
-            tooltip.style.visibility = 'hidden';
-            tooltip.style.opacity = '0';
-        }
-        
-        function toggleFolder(folder) {
-            const content = folder.querySelector('.folder-content');
-            const isOpen = content.classList.toggle('open');
-            
-            if (isOpen) {
-                const height = content.scrollHeight;
-                content.style.maxHeight = `${height}px`;
-            } else {
-                content.style.maxHeight = '0px';
-            }
-
-            
-            document.querySelectorAll('.folder-content.open').forEach(openContent => {
-                if (openContent !== content) {
-                    openContent.classList.remove('open');
-                    openContent.style.maxHeight = '0px';
-                }
-            });
-        }
-
-        function closeAllFolders() {
-            const allFolderContents = document.querySelectorAll('.folder-content');
-            allFolderContents.forEach(content => content.classList.remove('open'));
-        }
+        let currentIndex = 0;
 
         function updateProject() {
-            const currentProject = projects[currentCategory][currentProjectIndex];
-            gameTitle.textContent = currentProject.title;
-            gameDescription.textContent = currentProject.description;
-            gamePreview.src = currentProject.url;
-            updateActiveProjectInList();
+            const project = projects[currentCategory][currentIndex];
+            const projectTitle = document.getElementById('projectTitle');
+            const projectDescription = document.getElementById('projectDescription');
+            const projectPreview = document.getElementById('projectPreview');
+            
+            projectTitle.textContent = project.title;
+            projectDescription.textContent = project.description;
+            projectPreview.src = project.url;
+
+            projectTitle.classList.remove('fade-in');
+            projectDescription.classList.remove('fade-in');
+            void projectTitle.offsetWidth;
+            void projectDescription.offsetWidth;
+            projectTitle.classList.add('fade-in');
+            projectDescription.classList.add('fade-in');
         }
 
-        function updateActiveProjectInList() {
-            const allListItems = folderList.getElementsByTagName('li');
-            for (let i = 0; i < allListItems.length; i++) {
-                allListItems[i].classList.remove('active');
-            }
-            const currentCategoryFolder = folderList.querySelector(`.folder:nth-child(${Object.keys(projects).indexOf(currentCategory) + 1})`);
-            const currentListItems = currentCategoryFolder.getElementsByTagName('li');
-            currentListItems[currentProjectIndex].classList.add('active');
-        }
-
-        function navigateProjects(direction) {
-            const categories = Object.keys(projects);
-            let currentCategoryIndex = categories.indexOf(currentCategory);
-            let newProjectIndex = currentProjectIndex + direction;
-
-            if (newProjectIndex < 0 || newProjectIndex >= projects[currentCategory].length) {
-                currentCategoryIndex = (currentCategoryIndex + direction + categories.length) % categories.length;
-                currentCategory = categories[currentCategoryIndex];
-                newProjectIndex = direction > 0 ? 0 : projects[currentCategory].length - 1;
-            }
-
-            currentProjectIndex = newProjectIndex;
+        function navigate(direction) {
+            currentIndex = (currentIndex + direction + projects[currentCategory].length) % projects[currentCategory].length;
             updateProject();
         }
 
-        prevButton.addEventListener('click', () => navigateProjects(-1));
-        nextButton.addEventListener('click', () => navigateProjects(1));
-
-        fullscreenButton.addEventListener('click', () => {
-            window.open(projects[currentCategory][currentProjectIndex].url, '_blank');
+        document.getElementById('prevBtn').addEventListener('click', () => navigate(-1));
+        document.getElementById('nextBtn').addEventListener('click', () => navigate(1));
+        document.getElementById('launchBtn').addEventListener('click', () => {
+            window.open(projects[currentCategory][currentIndex].url, '_blank');
         });
 
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.folder')) {
-                closeAllFolders();
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                if (currentCategory !== tab.dataset.category) {
+                    document.querySelector('.tab.active').classList.remove('active');
+                    tab.classList.add('active');
+                    currentCategory = tab.dataset.category;
+                    currentIndex = 0;
+                    updateProject();
+                }
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                navigate(-1);
+            } else if (e.key === 'ArrowRight') {
+                navigate(1);
             }
         });
 
-        createFolderSystem();
+        function handleTouchStart(e) {
+            touchStartX = e.touches[0].clientX;
+        }
+
+        function handleTouchMove(e) {
+            if (!touchStartX) return;
+            
+            const touchEndX = e.touches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    navigate(1);
+                } else {
+                    navigate(-1);
+                }
+                touchStartX = null;
+            }
+        }
+
+        function handleTouchEnd() {
+            touchStartX = null;
+        }
+
+        const projectPreview = document.getElementById('projectPreview');
+        let touchStartX = null;
+
+        projectPreview.addEventListener('touchstart', handleTouchStart);
+        projectPreview.addEventListener('touchmove', handleTouchMove);
+        projectPreview.addEventListener('touchend', handleTouchEnd);
+
         updateProject();
     </script>
 </body>
